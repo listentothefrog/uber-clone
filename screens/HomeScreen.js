@@ -1,14 +1,18 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, SafeAreaView } from "react-native";
 import React from "react";
 
 const HomeScreen = () => {
   return (
-    <View>
-      <Text>I am the HomeScreen</Text>
-    </View>
+    <SafeAreaView>
+      <Text style={styles.text}>I am the HomeScreen</Text>
+    </SafeAreaView>
   );
 };
 
 export default HomeScreen;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  text: {
+    color: "blue",
+  },
+});
