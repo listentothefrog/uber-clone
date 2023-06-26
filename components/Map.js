@@ -13,14 +13,25 @@ const Map = () => {
       {origin?.loaction?.lat && origin?.loaction?.lng ? (
         <MapView
           style={styles.map}
-          mapType="mutedStandard"
           region={{
             latitude: origin.loaction.lat,
             longitude: origin.loaction.lng,
             latitudeDelta: 0.005,
             longitudeDelta: 0.005,
           }}
-        />
+        >
+          {origin?.loaction && (
+            <Marker
+              coordinate={{
+                latitude: origin.loaction.lat,
+                longitude: origin.loaction.lng,
+              }}
+              title="Origin"
+              description={origin.description}
+              identifier="origin"
+            />
+          )}
+        </MapView>
       ) : (
         <Text>Loading map...</Text>
       )}
