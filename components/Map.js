@@ -2,19 +2,28 @@ import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import MapView from "react-native-maps";
 import { Marker } from "react-native-maps";
+import { useSelector } from "react-redux";
+import { selectOrigin } from "../slices/navSlice";
 
 const Map = () => {
+  const origin = useSelector(selectOrigin);
+
   return (
     <View style={styles.container}>
-      <MapView
-        style={styles.map}
-        region={{
-          latitude: 37.78825,
-          longitude: -122.4324,
-          latitudeDelta: 0.015,
-          longitudeDelta: 0.0121,
-        }}
-      ></MapView>
+      {origin?.loaction?.lat && origin?.loaction?.lng ? (
+        <MapView
+          style={styles.map}
+          mapType="mutedStandard"
+          region={{
+            latitude: origin.loaction.lat,
+            longitude: origin.loaction.lng,
+            latitudeDelta: 0.005,
+            longitudeDelta: 0.005,
+          }}
+        />
+      ) : (
+        <Text>Loading map...</Text>
+      )}
     </View>
   );
 };
