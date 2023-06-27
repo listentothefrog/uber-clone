@@ -9,6 +9,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import MapScreen from "./screens/MapScreen";
 import LoginScreen from "./screens/LoginScreen";
+import CreateAccountScreen from "./screens/CreateAccountScreen";
 
 export default function App() {
   const Stack = createStackNavigator();
@@ -21,6 +22,11 @@ export default function App() {
             <Stack.Screen
               name="LoginScreen"
               component={LoginScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="CreateAccountScreen"
+              component={CreateAccountScreen}
               options={{ headerShown: false }}
             />
             <Stack.Screen
