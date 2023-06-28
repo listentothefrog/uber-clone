@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
   },
   overlay: {
     ...tw`absolute top-0 bottom-0 left-0 right-0 p-5 w-full h-full flex flex-col justify-end`,
-    backgroundColor: "rgba(0, 0, 0, 0.7)", // Adjust the opacity to control the darkness of the overlay
+    backgroundColor: "rgba(0, 0, 0, 0.7)",
   },
 });
 
