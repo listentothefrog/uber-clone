@@ -1,15 +1,15 @@
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
 import { Provider } from "react-redux";
 import { store } from "./store";
 import HomeScreen from "./screens/HomeScreen";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import "react-native-gesture-handler";
-import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
-import MapScreen from "./screens/MapScreen";
 import LoginScreen from "./screens/LoginScreen";
 import CreateAccountScreen from "./screens/CreateAccountScreen";
+import MapScreen from "./screens/MapScreen";
+import GettingStartedScreen from "./screens/GettingStartedScreen";
 
 export default function App() {
   const Stack = createStackNavigator();
@@ -19,6 +19,11 @@ export default function App() {
       <NavigationContainer>
         <SafeAreaProvider>
           <Stack.Navigator>
+            <Stack.Screen
+              name="GettingStartedScreen"
+              component={GettingStartedScreen}
+              options={{ headerShown: false }}
+            />
             <Stack.Screen
               name="LoginScreen"
               component={LoginScreen}
