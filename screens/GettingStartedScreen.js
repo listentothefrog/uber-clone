@@ -1,8 +1,22 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Text, View, TouchableOpacity, Image, StyleSheet } from "react-native";
 import tw from "tailwind-react-native-classnames";
-
+import { useFonts } from "expo-font";
 const GettingStartedScreen = ({ navigation }) => {
+  const [fontsLoaded] = useFonts({
+    UberMoveMedium: require("../assets/fonts/UberMoveMedium.otf"),
+    UberMoveBold: require("../assets/fonts/UberMoveBold.otf"),
+  });
+
+  useEffect(() => {
+    if (!fontsLoaded) {
+      return;
+    }
+  }, [fontsLoaded]);
+
+  if (!fontsLoaded) {
+    return null;
+  }
   return (
     <View style={tw`flex-1 justify-center items-center`}>
       <Image
@@ -13,10 +27,8 @@ const GettingStartedScreen = ({ navigation }) => {
         resizeMode="cover"
       />
       <View style={styles.overlay}>
-        <Text style={tw`text-white text-4xl font-bold mb-5`}>
-          Welcome to Uber
-        </Text>
-        <Text style={tw`text-white text-sm mb-5`}>
+        <Text style={boldText}>Welcome to Uber</Text>
+        <Text style={descriptionText}>
           Ultimate companion for hassle-free transportation. With intuitive
           features and real-time updates, we connect you to reliable rides at
           your fingertips. Whether you need a quick ride across town or a
@@ -24,16 +36,32 @@ const GettingStartedScreen = ({ navigation }) => {
           comfortable journey.
         </Text>
         <TouchableOpacity
-          style={tw`bg-white py-3 rounded-lg border-white border-2`}
+          style={loginButton}
           onPress={() => navigation.navigate("LoginScreen")}
         >
-          <Text style={tw`text-black text-lg text-center`}>Login</Text>
+          <Text
+            style={{
+              fontFamily: "UberMoveMedium",
+              color: "black",
+              textAlign: "center",
+              fontSize: 18,
+            }}
+          >
+            Login
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={tw`border-2 border-white py-3 rounded-lg mt-5 mb-4`}
+          style={accountButton}
           onPress={() => navigation.navigate("CreateAccountScreen")}
         >
-          <Text style={tw`text-white text-lg text-center`}>
+          <Text
+            style={{
+              fontFamily: "UberMoveMedium",
+              color: "white",
+              textAlign: "center",
+              fontSize: 18,
+            }}
+          >
             Create an Account
           </Text>
         </TouchableOpacity>
@@ -52,6 +80,28 @@ const styles = StyleSheet.create({
     ...tw`absolute top-0 bottom-0 left-0 right-0 p-5 w-full h-full flex flex-col justify-end`,
     backgroundColor: "rgba(0, 0, 0, 0.7)",
   },
+});
+
+const boldText = StyleSheet.create({
+  ...tw`text-white font-bold mb-5`,
+  fontFamily: "UberMoveBold",
+  fontSize: 45,
+});
+
+const descriptionText = StyleSheet.create({
+  ...tw`text-white mb-5`,
+  fontFamily: "UberMoveMedium",
+  fontSize: 16,
+});
+
+const loginButton = StyleSheet.create({
+  ...tw`bg-white py-3 rounded-lg border-white border-2`,
+  fontFamily: "UberMoveMedium",
+});
+
+const accountButton = StyleSheet.create({
+  ...tw`border-2 border-white py-3 rounded-lg mt-5 mb-4`,
+  fontFamily: "UberMoveMedium",
 });
 
 export default GettingStartedScreen;

@@ -1,4 +1,12 @@
-import { Text, TextInput, View, Pressable, Image, Alert } from "react-native";
+import {
+  Text,
+  TextInput,
+  View,
+  Pressable,
+  Image,
+  Alert,
+  StyleSheet,
+} from "react-native";
 import React, { useEffect } from "react";
 import tw from "tailwind-react-native-classnames";
 import { useState } from "react";
@@ -10,6 +18,7 @@ import {
 import { app } from "../firebase";
 import { Link } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
+import { useFonts } from "expo-font";
 
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
@@ -25,6 +34,22 @@ const LoginScreen = () => {
     });
     return unsub;
   });
+
+  const [fontsLoaded] = useFonts({
+    UberMoveMedium: require("../assets/fonts/UberMoveMedium.otf"),
+    UberMoveBold: require("../assets/fonts/UberMoveBold.otf"),
+  });
+
+  useEffect(() => {
+    if (!fontsLoaded) {
+      return;
+    }
+  }, [fontsLoaded]);
+
+  if (!fontsLoaded) {
+    return null;
+  }
+
   const handleEmailSignIn = () => {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
@@ -69,9 +94,9 @@ const LoginScreen = () => {
         source={{ uri: "https://links.papareact.com/gzs" }}
       />
       <View style={tw`p-8 w-full max-w-sm`}>
-        <Text style={tw`text-2xl font-bold mb-6 text-black`}>Login</Text>
+        <Text style={boldText}>Login</Text>
         <TextInput
-          style={tw`w-full bg-gray-200 rounded-md h-12 px-4 mb-4`}
+          style={inputFeilds}
           placeholderTextColor="#000"
           value={email}
           keyboardType="email-address"
@@ -80,7 +105,7 @@ const LoginScreen = () => {
         />
 
         <TextInput
-          style={tw`w-full bg-gray-200 rounded-md h-12 px-4`}
+          style={inputFeilds}
           placeholderTextColor="#000"
           value={password}
           onChangeText={(text) => setPassword(text)}
@@ -89,7 +114,16 @@ const LoginScreen = () => {
         />
         <View style={tw`flex flex-row justify-end items-center my-8`}>
           <Pressable>
-            <Text style={tw`text-black font-bold`}>Reset password</Text>
+            <Text
+              style={{
+                fontFamily: "UberMoveBold",
+                color: "black",
+                fontWeight: "bold",
+                fontSize: 16,
+              }}
+            >
+              Reset password
+            </Text>
           </Pressable>
         </View>
 
@@ -97,19 +131,23 @@ const LoginScreen = () => {
           style={tw`w-full bg-black rounded-full h-12 px-4 mb-4 flex flex-row`}
         >
           <View style={tw`flex-1 flex items-center`}>
-            <Text
-              onPress={handleEmailSignIn}
-              style={tw`text-white text-center pt-3 pb-8 w-full text-base font-medium`}
-            >
+            <Text onPress={handleEmailSignIn} style={buttonText}>
               Login
             </Text>
           </View>
         </Pressable>
         <View style={tw`pt-5 flex w-full items-center flex-row justify-center`}>
-          <Text>
+          <Text style={{ fontFamily: "UberMoveMedium", fontSize: 16 }}>
             Don't have an account?{" "}
             <Link to={{ screen: "CreateAccountScreen" }}>
-              <Text style={tw`text-blue-600 underline font-bold`}>
+              <Text
+                style={{
+                  color: "blue",
+                  textDecorationLine: "underline",
+                  fontFamily: "UberMoveBold",
+                  fontWeight: "bold",
+                }}
+              >
                 Click here
               </Text>
             </Link>
@@ -121,3 +159,19 @@ const LoginScreen = () => {
 };
 
 export default LoginScreen;
+
+const boldText = StyleSheet.create({
+  ...tw`font-bold mb-6 text-black`,
+  fontFamily: "UberMoveBold",
+  fontSize: 35,
+});
+
+const inputFeilds = StyleSheet.create({
+  ...tw`w-full bg-gray-200 rounded-md h-12 px-4 mb-4`,
+  fontFamily: "UberMoveBold",
+});
+
+const buttonText = StyleSheet.create({
+  ...tw`text-white text-center pt-3 pb-8 w-full text-base font-medium`,
+  fontFamily: "UberMoveMedium",
+});

@@ -1,4 +1,12 @@
-import { Text, TextInput, View, Pressable, Image } from "react-native";
+import {
+  Text,
+  TextInput,
+  View,
+  Pressable,
+  Image,
+  Alert,
+  StyleSheet,
+} from "react-native";
 import React, { useState, useEffect } from "react";
 import tw from "tailwind-react-native-classnames";
 import {
@@ -8,6 +16,7 @@ import {
 } from "firebase/auth";
 import { app } from "../firebase";
 import { Link, useNavigation } from "@react-navigation/native";
+import { useFonts } from "expo-font";
 
 const SignupScreen = () => {
   const [email, setEmail] = useState("");
@@ -24,8 +33,9 @@ const SignupScreen = () => {
         navigation.navigate("HomeScreen");
       }
     });
-    return unsub;
-  });
+    return () => unsub();
+  }, [navigation]);
+
   const handleAccountCreation = () => {
     if (password !== verifiedPassword) {
       setErrorMessage("Passwords do not match");
@@ -62,6 +72,21 @@ const SignupScreen = () => {
     };
   };
 
+  const [fontsLoaded] = useFonts({
+    UberMoveMedium: require("../assets/fonts/UberMoveMedium.otf"),
+    UberMoveBold: require("../assets/fonts/UberMoveBold.otf"),
+  });
+
+  useEffect(() => {
+    if (!fontsLoaded) {
+      return;
+    }
+  }, [fontsLoaded]);
+
+  if (!fontsLoaded) {
+    return null;
+  }
+
   return (
     <View style={tw`flex-1 items-center justify-center bg-white`}>
       <Image
@@ -69,11 +94,9 @@ const SignupScreen = () => {
         source={{ uri: "https://links.papareact.com/gzs" }}
       />
       <View style={tw`p-8 w-full max-w-sm`}>
-        <Text style={tw`text-2xl font-bold mb-6 text-black`}>
-          Create your Uber account
-        </Text>
+        <Text style={boldText}>Create your Uber account</Text>
         <TextInput
-          style={tw`w-full bg-gray-200 rounded-md h-12 px-4 mb-4`}
+          style={inputFeilds}
           placeholderTextColor="#000"
           value={email}
           keyboardType="email-address"
@@ -82,7 +105,7 @@ const SignupScreen = () => {
         />
 
         <TextInput
-          style={tw`w-full bg-gray-200 rounded-md h-12 px-4 mb-4`}
+          style={inputFeilds}
           placeholderTextColor="#000"
           value={password}
           onChangeText={(text) => setPassword(text)}
@@ -91,7 +114,7 @@ const SignupScreen = () => {
         />
 
         <TextInput
-          style={tw`w-full bg-gray-200 rounded-md h-12 px-4 mb-4`}
+          style={inputFeilds}
           placeholderTextColor="#000"
           value={verifiedPassword}
           onChangeText={(text) => setVerifiedPassword(text)}
@@ -100,7 +123,7 @@ const SignupScreen = () => {
         />
 
         {errorMessage !== "" && (
-          <Text style={tw`text-red-500 mb-4 text-sm`}>{errorMessage}</Text>
+          <Text style={errorMessageText}>{errorMessage}</Text>
         )}
 
         <Pressable
@@ -108,17 +131,24 @@ const SignupScreen = () => {
           onPress={handleAccountCreation}
         >
           <View style={tw`flex-1 flex items-center justify-center`}>
-            <Text style={tw`text-white text-center text-base font-medium`}>
-              Create Account
-            </Text>
+            <Text style={buttonText}>Create Account</Text>
           </View>
         </Pressable>
 
         <View style={tw`pt-5 flex w-full items-center flex-row justify-center`}>
-          <Text>
+          <Text style={{ fontFamily: "UberMoveMedium", fontSize: 16 }}>
             Already have an account?{" "}
             <Link to={{ screen: "LoginScreen" }}>
-              <Text style={tw`text-blue-600 underline font-bold`}>Log In</Text>
+              <Text
+                style={{
+                  color: "blue",
+                  textDecorationLine: "underline",
+                  fontFamily: "UberMoveBold",
+                  fontWeight: "bold",
+                }}
+              >
+                Log In
+              </Text>
             </Link>
           </Text>
         </View>
@@ -128,3 +158,24 @@ const SignupScreen = () => {
 };
 
 export default SignupScreen;
+
+const boldText = StyleSheet.create({
+  ...tw`font-bold mb-6 text-black`,
+  fontFamily: "UberMoveBold",
+  fontSize: 30,
+});
+
+const inputFeilds = StyleSheet.create({
+  ...tw`w-full bg-gray-200 rounded-md h-12 px-4 mb-4`,
+  fontFamily: "UberMoveBold",
+});
+
+const buttonText = StyleSheet.create({
+  ...tw`text-white text-center pt-3 pb-8 w-full text-base font-medium`,
+  fontFamily: "UberMoveMedium",
+});
+
+const errorMessageText = StyleSheet.create({
+  ...tw`text-red-500 mb-4 text-sm`,
+  fontFamily: "UberMoveBold",
+});
